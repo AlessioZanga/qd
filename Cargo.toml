@@ -1,0 +1,16 @@
+[package]
+name = "qd"
+version = "0.0.0"
+edition = "2021"
+authors = [ "Alessio Zanga <alessio.zanga@outlook.it>" ]
+description = "A Library for Double-Double and Quad-Double Arithmetic."
+readme = "README.md"
+license = "Apache-2.0 OR MIT"
+homepage = "https://github.com/AlessioZanga/qd"
+repository = "https://github.com/AlessioZanga/qd"
+documentation = "https://docs.rs/qd"
+keywords = [ "double", "double-double", "quad-double" ]
+categories = [ "algorithms", "data-structures", "mathematics", "science" ]
+
+[dependencies]
+num-traits = "^0.2"
