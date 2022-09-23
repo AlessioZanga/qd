@@ -2,7 +2,7 @@ use core::ops::{Add, Div, Mul, Neg, Rem, Sub};
 
 use num_traits::{Inv, One};
 
-use crate::utils::{two_diff, two_prod, two_sum};
+use crate::utils::{quick_two_sum, two_diff, two_prod, two_sum};
 
 use super::{data::normalize, f128};
 
@@ -13,7 +13,7 @@ impl Neg for f128 {
 
     #[inline(always)]
     fn neg(self) -> Self::Output {
-        (-self.0, -self.1).into()
+        Self::Output::new(-self.0, -self.1)
     }
 }
 
@@ -22,7 +22,7 @@ impl Inv for f128 {
 
     #[inline(always)]
     fn inv(self) -> Self::Output {
-        f128::one() / self
+        Self::one() / self
     }
 }
 
@@ -39,6 +39,15 @@ impl Add<f64> for f128 {
     }
 }
 
+impl Add<f128> for f64 {
+    type Output = f128;
+
+    #[inline(always)]
+    fn add(self, rhs: f128) -> Self::Output {
+        rhs + self
+    }
+}
+
 impl Sub<f64> for f128 {
     type Output = Self;
 
@@ -50,6 +59,17 @@ impl Sub<f64> for f128 {
     }
 }
 
+impl Sub<f128> for f64 {
+    type Output = f128;
+
+    #[inline(always)]
+    fn sub(self, rhs: f128) -> Self::Output {
+        let (s, e) = two_diff(self, rhs.0);
+
+        normalize(s, e, -rhs.1)
+    }
+}
+
 impl Mul<f64> for f128 {
     type Output = Self;
 
@@ -58,6 +78,15 @@ impl Mul<f64> for f128 {
         let (s, e) = two_prod(self.0, rhs);
 
         normalize(s, e, self.1 * rhs)
+    }
+}
+
+impl Mul<f128> for f64 {
+    type Output = f128;
+
+    #[inline(always)]
+    fn mul(self, rhs: f128) -> Self::Output {
+        rhs * self
     }
 }
 
@@ -77,11 +106,21 @@ impl Div<f64> for f128 {
     }
 }
 
+impl Div<f128> for f64 {
+    type Output = f128;
+
+    #[inline(always)]
+    fn div(self, rhs: f128) -> Self::Output {
+        Self::Output::new(self, 0.0) / rhs
+    }
+}
+
 impl Rem<f64> for f128 {
     type Output = Self;
 
+    #[inline(always)]
     fn rem(self, rhs: f64) -> Self::Output {
-        todo!() /* TODO: */
+        self % Self::Output::new(rhs, 0.0)
     }
 }
 
@@ -91,7 +130,12 @@ impl Add<f128> for f128 {
     type Output = Self;
 
     fn add(self, rhs: Self) -> Self::Output {
-        todo!() /* TODO: */
+        let (s0, e0) = two_sum(self.0, rhs.0);
+        let (s1, e1) = two_sum(self.1, rhs.1);
+
+        let (s0, s1) = quick_two_sum(s0, s1 + e0);
+
+        normalize(s0, s1, e1)
     }
 }
 
