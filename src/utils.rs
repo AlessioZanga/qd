@@ -25,7 +25,7 @@ pub fn two_sum(a: f64, b: f64) -> (f64, f64) {
 pub fn two_diff(a: f64, b: f64) -> (f64, f64) {
     let s = a - b;
     let v = s - a;
-    let e = (a - (s - v)) + (b + v);
+    let e = (a - (s - v)) - (b + v);
 
     (s, e)
 }
