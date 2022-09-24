@@ -13,7 +13,7 @@ impl Neg for f128 {
 
     #[inline(always)]
     fn neg(self) -> Self::Output {
-        Self::Output::new(-self.0, -self.1)
+        Self::Output::new(-self[0], -self[1])
     }
 }
 
@@ -33,9 +33,9 @@ impl Add<f64> for f128 {
 
     #[inline(always)]
     fn add(self, rhs: f64) -> Self::Output {
-        let (s, e) = two_sum(self.0, rhs);
+        let (s, e) = two_sum(self[0], rhs);
 
-        normalize(s, e, self.1)
+        normalize(s, e, self[1])
     }
 }
 
@@ -53,9 +53,9 @@ impl Sub<f64> for f128 {
 
     #[inline(always)]
     fn sub(self, rhs: f64) -> Self::Output {
-        let (s, e) = two_diff(self.0, rhs);
+        let (s, e) = two_diff(self[0], rhs);
 
-        normalize(s, e, self.1)
+        normalize(s, e, self[1])
     }
 }
 
@@ -64,9 +64,9 @@ impl Sub<f128> for f64 {
 
     #[inline(always)]
     fn sub(self, rhs: f128) -> Self::Output {
-        let (s, e) = two_diff(self, rhs.0);
+        let (s, e) = two_diff(self, rhs[0]);
 
-        normalize(s, e, -rhs.1)
+        normalize(s, e, -rhs[1])
     }
 }
 
@@ -75,9 +75,9 @@ impl Mul<f64> for f128 {
 
     #[inline(always)]
     fn mul(self, rhs: f64) -> Self::Output {
-        let (s, e) = two_prod(self.0, rhs);
+        let (s, e) = two_prod(self[0], rhs);
 
-        normalize(s, e, self.1 * rhs)
+        normalize(s, e, self[1] * rhs)
     }
 }
 
@@ -95,12 +95,12 @@ impl Div<f64> for f128 {
 
     fn div(self, rhs: f64) -> Self::Output {
         // Compute first approximation.
-        let s = self.0 / rhs;
+        let s = self[0] / rhs;
 
         // Compute second approximation.
         let (p0, p1) = two_prod(s, rhs);
-        let (p0, e) = two_diff(self.0, p0);
-        let e = (p0 + (e + self.1 - p1)) / rhs;
+        let (p0, e) = two_diff(self[0], p0);
+        let e = (p0 + (e + self[1] - p1)) / rhs;
 
         normalize(s, e, 0.0)
     }
@@ -130,8 +130,8 @@ impl Add<f128> for f128 {
     type Output = Self;
 
     fn add(self, rhs: Self) -> Self::Output {
-        let (s0, e0) = two_sum(self.0, rhs.0);
-        let (s1, e1) = two_sum(self.1, rhs.1);
+        let (s0, e0) = two_sum(self[0], rhs[0]);
+        let (s1, e1) = two_sum(self[1], rhs[1]);
 
         let (s0, s1) = quick_two_sum(s0, s1 + e0);
 

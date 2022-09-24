@@ -1,4 +1,5 @@
 use core::cmp::Ordering;
+use core::ops::Index;
 
 use num_traits::{Num, One, Zero};
 
@@ -6,26 +7,21 @@ use crate::utils::quick_two_sum;
 
 /// Double-double data structure.
 #[allow(non_camel_case_types)]
-#[derive(Copy, Clone, PartialEq, PartialOrd)]
-pub struct f128(pub f64, pub f64);
+#[derive(Copy, Clone, Debug, PartialEq, PartialOrd)]
+pub struct f128([f64; 2]);
 
 impl f128 {
     /// Builds a new f128 from a pair of f64.
     #[inline(always)]
     pub const fn new(a0: f64, a1: f64) -> Self {
-        Self(a0, a1)
+        Self([a0, a1])
     }
-    
-    /// Returns the high part of f128.
-    #[inline(always)]
-    pub const fn hi(&self) -> f64 {
-        self.0
-    }
+}
 
-    /// Returns the low part of f128.
+impl From<[f64; 2]> for f128 {
     #[inline(always)]
-    pub const fn lo(&self) -> f64 {
-        self.1
+    fn from([a0, a1]: [f64; 2]) -> Self {
+        Self::new(a0, a1)
     }
 }
 
@@ -36,24 +32,33 @@ impl From<(f64, f64)> for f128 {
     }
 }
 
+impl Index<usize> for f128 {
+    type Output = f64;
+
+    #[inline(always)]
+    fn index(&self, index: usize) -> &Self::Output {
+        &self.0[index]
+    }
+}
+
 impl PartialEq<f64> for f128 {
     #[inline(always)]
     fn eq(&self, rhs: &f64) -> bool {
-        self.0 == *rhs && self.1 == 0.0
+        self[0] == *rhs && self[1] == 0.0
     }
 }
 
 impl PartialEq<f128> for f64 {
     #[inline(always)]
     fn eq(&self, rhs: &f128) -> bool {
-        self == &rhs.0 && rhs.1 == 0.0
+        self == &rhs[0] && 0.0 == rhs[1]
     }
 }
 
 impl PartialOrd<f64> for f128 {
     fn partial_cmp(&self, rhs: &f64) -> Option<Ordering> {
-        match self.0.partial_cmp(rhs) {
-            Some(Ordering::Equal) => self.1.partial_cmp(&0.0),
+        match self[0].partial_cmp(rhs) {
+            Some(Ordering::Equal) => self[1].partial_cmp(&0.0),
             ordering => ordering,
         }
     }
@@ -61,8 +66,8 @@ impl PartialOrd<f64> for f128 {
 
 impl PartialOrd<f128> for f64 {
     fn partial_cmp(&self, rhs: &f128) -> Option<Ordering> {
-        match self.partial_cmp(&rhs.0) {
-            Some(Ordering::Equal) => rhs.1.partial_cmp(&0.0),
+        match self.partial_cmp(&rhs[0]) {
+            Some(Ordering::Equal) => (0.0).partial_cmp(&rhs[1]),
             ordering => ordering,
         }
     }
@@ -76,7 +81,7 @@ impl Zero for f128 {
 
     #[inline(always)]
     fn is_zero(&self) -> bool {
-        self.0 == 0.0 || self.0 == -0.0
+        self[0] == 0.0 || self[0] == -0.0
     }
 }
 
