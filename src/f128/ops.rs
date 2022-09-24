@@ -142,7 +142,7 @@ impl Add<f128> for f128 {
 impl Sub<f128> for f128 {
     type Output = Self;
 
-    fn sub(self, rhs: Self) -> Self::Output {
+    fn sub(self, _rhs: Self) -> Self::Output {
         todo!() /* TODO: */
     }
 }
@@ -150,7 +150,7 @@ impl Sub<f128> for f128 {
 impl Mul<f128> for f128 {
     type Output = Self;
 
-    fn mul(self, rhs: Self) -> Self::Output {
+    fn mul(self, _rhs: Self) -> Self::Output {
         todo!() /* TODO: */
     }
 }
@@ -158,7 +158,7 @@ impl Mul<f128> for f128 {
 impl Div<f128> for f128 {
     type Output = Self;
 
-    fn div(self, rhs: Self) -> Self::Output {
+    fn div(self, _rhs: Self) -> Self::Output {
         todo!() /* TODO: */
     }
 }
@@ -166,7 +166,7 @@ impl Div<f128> for f128 {
 impl Rem<f128> for f128 {
     type Output = Self;
 
-    fn rem(self, rhs: Self) -> Self::Output {
+    fn rem(self, _rhs: Self) -> Self::Output {
         todo!() /* TODO: */
     }
 }

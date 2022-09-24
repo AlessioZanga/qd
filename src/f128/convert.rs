@@ -15,6 +15,6 @@ impl ToPrimitive for f128 {
 impl NumCast for f128 {
     #[inline(always)]
     fn from<T: ToPrimitive>(n: T) -> Option<Self> {
-        n.to_f64().and_then(|n| Some((n, 0.0).into()))
+        n.to_f64().map(|n| (n, 0.0).into())
     }
 }

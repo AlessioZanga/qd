@@ -1,2 +1,2 @@
 mod data;
-pub use data::f256;
+pub use data::*;

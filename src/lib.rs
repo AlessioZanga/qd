@@ -1,5 +1,6 @@
 #![warn(missing_docs)]
 #![warn(rustdoc::missing_doc_code_examples)]
+#![allow(clippy::excessive_precision)]
 
 //! A Library for Double-Double and Quad-Double Arithmetic.
 

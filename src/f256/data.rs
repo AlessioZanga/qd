@@ -20,6 +20,6 @@ impl From<(f64, f64, f64, f64)> for f256 {
 
 /// Normalize f256 representation.
 #[inline(always)]
-pub fn normalize(a0: f64, a1: f64, a2: f64, a3: f64, a4: f64) -> f256 {
+pub fn normalize(_a0: f64, _a1: f64, _a2: f64, _a3: f64, _a4: f64) -> f256 {
     todo!() /* TODO: */
 }
