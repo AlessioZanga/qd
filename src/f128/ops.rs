@@ -4,7 +4,7 @@ use num_traits::{Inv, One};
 
 use crate::utils::{quick_two_sum, two_diff, two_prod, two_sum};
 
-use super::{data::normalize, f128};
+use super::f128;
 
 /* Unary operators. */
 
@@ -35,7 +35,7 @@ impl Add<f64> for f128 {
     fn add(self, rhs: f64) -> Self::Output {
         let (s, e) = two_sum(self[0], rhs);
 
-        normalize(s, e, self[1])
+        Self::Output::with_normalized(s, e, self[1])
     }
 }
 
@@ -55,7 +55,7 @@ impl Sub<f64> for f128 {
     fn sub(self, rhs: f64) -> Self::Output {
         let (s, e) = two_diff(self[0], rhs);
 
-        normalize(s, e, self[1])
+        Self::Output::with_normalized(s, e, self[1])
     }
 }
 
@@ -66,7 +66,7 @@ impl Sub<f128> for f64 {
     fn sub(self, rhs: f128) -> Self::Output {
         let (s, e) = two_diff(self, rhs[0]);
 
-        normalize(s, e, -rhs[1])
+        Self::Output::with_normalized(s, e, -rhs[1])
     }
 }
 
@@ -77,7 +77,7 @@ impl Mul<f64> for f128 {
     fn mul(self, rhs: f64) -> Self::Output {
         let (s, e) = two_prod(self[0], rhs);
 
-        normalize(s, e, self[1] * rhs)
+        Self::Output::with_normalized(s, e, self[1] * rhs)
     }
 }
 
@@ -102,7 +102,7 @@ impl Div<f64> for f128 {
         let (p0, e) = two_diff(self[0], p0);
         let e = (p0 + (e + self[1] - p1)) / rhs;
 
-        normalize(s, e, 0.0)
+        Self::Output::with_normalized(s, e, 0.0)
     }
 }
 
@@ -135,7 +135,7 @@ impl Add<f128> for f128 {
 
         let (s0, s1) = quick_two_sum(s0, s1 + e0);
 
-        normalize(s0, s1, e1)
+        Self::Output::with_normalized(s0, s1, e1)
     }
 }
 

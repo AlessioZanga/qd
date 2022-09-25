@@ -16,6 +16,12 @@ impl f128 {
     pub const fn new(a0: f64, a1: f64) -> Self {
         Self([a0, a1])
     }
+
+    /// From normalized f128 representation.
+    #[inline(always)]
+    pub fn with_normalized(a0: f64, a1: f64, a2: f64) -> Self {
+        quick_two_sum(a0, a1 + a2).into()
+    }
 }
 
 impl From<[f64; 2]> for f128 {
@@ -98,10 +104,4 @@ impl Num for f128 {
     fn from_str_radix(_str: &str, _radix: u32) -> Result<Self, Self::FromStrRadixErr> {
         todo!() /* TODO: */
     }
-}
-
-/// Normalize f128 representation.
-#[inline(always)]
-pub fn normalize(a0: f64, a1: f64, a2: f64) -> f128 {
-    quick_two_sum(a0, a1 + a2).into()
 }
